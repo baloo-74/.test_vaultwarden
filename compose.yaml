@@ -41,7 +41,8 @@ services:
             ATTACHMENTS_FOLDER: data/attachments
             SENDS_FOLDER: data/sends
             TMP_FOLDER: data/tmp
-            ADMIN_TOKEN_FILE: /run/secrets/admin_token
+            ADMIN_TOKEN: $argon2id$v=19$m=65540,t=3,p=4$94+GH3pynMg9cCG9TmEwGqknc1qtQgtHpTqDxfuiGdQ$j3nf2xT5oSM3b1hX+VBC6NMR//vckFkXKhDnpbe8DHE
+            #ADMIN_TOKEN_FILE: /run/secrets/admin_token
             ROCKET_PORT: 8000
             USER: 1030:100
             DATABASE_URL: mysql://vaultwarden_adm:hVXIHtRSpX4.1q@iserv-mariadb/vaultwarden_db
