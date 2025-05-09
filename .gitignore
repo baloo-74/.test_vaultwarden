@@ -8,4 +8,4 @@ composer.phar
 *.sec
 .env
 
-!.env.default
+!*.default
