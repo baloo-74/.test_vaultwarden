@@ -8,7 +8,7 @@ networks:
 
 secrets:
     admin_token:
-        file: ./vaultwarden/admin_token.txt       
+        file: ./vaultwarden/admin_token.sec     
 
 services:
 
