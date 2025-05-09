@@ -1,0 +1,57 @@
+networks:
+    ds218:
+        external: true
+        name: net_bridge
+    macvlan:
+        external: true
+        name: net_macvlan
+
+secrets:
+    admin_token:
+        file: ./vaultwarden/admin_token.txt       
+
+services:
+
+    vaultwarden:
+        container_name: iserv-vaultwarden
+        image: vaultwarden/server:latest
+        #build:
+            #context: ./mariadb
+#        healthcheck:
+#            test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+#            start_period: 15s
+#            interval: 10s
+#            timeout: 5s
+#            retries: 3
+#        restart: on-failure:3
+        #запуск с пользователем root без пароля
+        #потом зайти локально >mariadb -u root;
+        #исполнить >FLUSH PRIVILEGES;
+        #исполнить >SET PASSWORD FOR 'root'@'localhost' = PASSWORD('New_Password');
+        #command: --skip-grant-tables
+        networks:
+            - ds218
+            - macvlan
+        volumes:
+            - /volume1/docker/vaultwarden:/data:rw
+            - ./env/resolv.conf:/etc/resolv.conf:ro
+        environment:
+            RSA_KEY_FILENAME: data/rsa_key
+            ICON_CACHE_FOLDER: data/icon_cache
+            ATTACHMENTS_FOLDER: data/attachments
+            SENDS_FOLDER: data/sends
+            TMP_FOLDER: data/tmp
+            ADMIN_TOKEN_FILE: /run/secrets/admin_token
+            ROCKET_PORT: 8000
+            USER: 1030:100
+            DATABASE_URL: mysql://vaultwarden_adm:hVXIHtRSpX4.1q@iserv-mariadb/vaultwarden_db
+            DOMAIN: "https://пароль.медвежуть.рф"
+            # Отключите эту опцию с помощью "false" после создания учетной записи, чтобы никто из посторонних не смог зарегистрироваться.
+            SIGNUPS_ALLOWED: "true"
+            #TZ: Europe/Moscow
+            # запускается при первом старте mariadb для установки пользователю root пароля MARIADB_ROOT_PASSWORD
+            #MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
+            # запускается при первом старте mariadb для создания файла .my-healthcheck.cnf
+            #MARIADB_AUTO_UPGRADE: 1
+        secrets:
+            -  admin_token
