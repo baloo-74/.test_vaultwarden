@@ -47,9 +47,14 @@ services:
             #ADMIN_TOKEN_FILE: /run/secrets/admin_token
             #ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
             ROCKET_PORT: 8000
+            #Включение push-уведомлений мобильного клиента
+            PUSH_ENABLED: true
+            #PUSH_INSTALLATION_ID: 8c881faa-b84a-416d-b6e6-b2d800b5f5f3
+            #PUSH_INSTALLATION_KEY: 0tqxCXyxmzEoPkHa5dH9
             USER: 1030:100
-            DATABASE_URL: mysql://vaultwarden_adm:hVXIHtRSpX4.1q@iserv-mariadb/vaultwarden_db
-            DOMAIN: "https://пароль.медвежуть.рф"
+            #DATABASE_URL: mysql://vaultwarden_adm:hVXIHtRSpX4.1q@iserv-mariadb/vaultwarden_db
+            DATABASE_URL: mysql://${vaultwarden_user}:${vaultwarden_mysql_password}@iserv-mariadb/${vaultwarden_database}
+            #DOMAIN: "https://пароль.медвежуть.рф"
             # Отключите эту опцию с помощью "false" после создания учетной записи, чтобы никто из посторонних не смог зарегистрироваться.
             SIGNUPS_ALLOWED: "true"
             #TZ: Europe/Moscow
