@@ -35,14 +35,17 @@ services:
         volumes:
             - /volume1/docker/vaultwarden:/data:rw
             - ./env/resolv.conf:/etc/resolv.conf:ro
+        env_file:
+            - ./vaultwarden/.env
         environment:
             RSA_KEY_FILENAME: data/rsa_key
             ICON_CACHE_FOLDER: data/icon_cache
             ATTACHMENTS_FOLDER: data/attachments
             SENDS_FOLDER: data/sends
             TMP_FOLDER: data/tmp
-            ADMIN_TOKEN: $argon2id$v=19$m=65540,t=3,p=4$94+GH3pynMg9cCG9TmEwGqknc1qtQgtHpTqDxfuiGdQ$j3nf2xT5oSM3b1hX+VBC6NMR//vckFkXKhDnpbe8DHE
+            #ADMIN_TOKEN: '$$argon2id$$v=19$$m=65540,t=3,p=4$$muUJD6p5HFOnJ67pfdD6lz+mYJMcEFiKeHGATzcYKlg$$90yZTN3iPJ9/OSsQyl2p8sy8fcfycP7kNK/jpMePA5s'
             #ADMIN_TOKEN_FILE: /run/secrets/admin_token
+            #ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
             ROCKET_PORT: 8000
             USER: 1030:100
             DATABASE_URL: mysql://vaultwarden_adm:hVXIHtRSpX4.1q@iserv-mariadb/vaultwarden_db
