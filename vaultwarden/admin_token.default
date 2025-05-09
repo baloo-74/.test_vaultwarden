@@ -5,5 +5,13 @@
 я использую vwcontainer в качестве имени контейнера ниже, замените его на правильное им€ контейнера вашего экземпл€ра.
 CLI Vaultwarden дважды запросит пароль, и если оба одинаковы, он выведет сгенерированную строку PHC.
 
-# Using the vaultwarden binary directly
-./vaultwarden hash
+материал https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
+
+делал через строку в теринале
+docker exec -it vwcontainer /vaultwarden hash
+
+при записе в admin_token.sec правило ниже не примен€л
+
+ѕри использовании Docker Compose и настройке ADMIN_TOKENс помощью environment
+директивы вам необходимо экранировать все п€ть вхождений знака доллара $в сгенерированной строке argon2 PHC
+с помощью двух знаков доллара, $$чтобы предотвратить интерпол€цию переменных

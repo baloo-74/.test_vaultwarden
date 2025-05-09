@@ -8,59 +8,52 @@ networks:
 
 secrets:
     admin_token:
-        file: ./vaultwarden/admin_token.sec     
+        file: ./vaultwarden/admin_token.sec
+    database_url:
+        file: ./vaultwarden/database_url.sec
+    push_installation_id:
+        file: ./vaultwarden/push_installation_id.sec
+    push_installation_key:
+        file: ./vaultwarden/push_installation_key.sec
+    domain:
+        file: ./vaultwarden/domain.sec
 
 services:
 
     vaultwarden:
         container_name: iserv-vaultwarden
         image: vaultwarden/server:latest
-        #build:
-            #context: ./mariadb
-#        healthcheck:
-#            test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
-#            start_period: 15s
-#            interval: 10s
-#            timeout: 5s
-#            retries: 3
-#        restart: on-failure:3
-        #запуск с пользователем root без пароля
-        #потом зайти локально >mariadb -u root;
-        #исполнить >FLUSH PRIVILEGES;
-        #исполнить >SET PASSWORD FOR 'root'@'localhost' = PASSWORD('New_Password');
-        #command: --skip-grant-tables
         networks:
             - ds218
             - macvlan
         volumes:
             - /volume1/docker/vaultwarden:/data:rw
             - ./env/resolv.conf:/etc/resolv.conf:ro
-        env_file:
-            - ./vaultwarden/.env
         environment:
             RSA_KEY_FILENAME: data/rsa_key
             ICON_CACHE_FOLDER: data/icon_cache
             ATTACHMENTS_FOLDER: data/attachments
             SENDS_FOLDER: data/sends
             TMP_FOLDER: data/tmp
-            #ADMIN_TOKEN: '$$argon2id$$v=19$$m=65540,t=3,p=4$$muUJD6p5HFOnJ67pfdD6lz+mYJMcEFiKeHGATzcYKlg$$90yZTN3iPJ9/OSsQyl2p8sy8fcfycP7kNK/jpMePA5s'
-            #ADMIN_TOKEN_FILE: /run/secrets/admin_token
-            #ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
             ROCKET_PORT: 8000
+            USER: 1030:100
+            #ADMIN_TOKEN: читать https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
+            #ADMIN_TOKEN: токен администратора
+            ADMIN_TOKEN_FILE: /run/secrets/admin_token
+            #https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification
             #Включение push-уведомлений мобильного клиента
             PUSH_ENABLED: true
-            #PUSH_INSTALLATION_ID: 8c881faa-b84a-416d-b6e6-b2d800b5f5f3
-            #PUSH_INSTALLATION_KEY: 0tqxCXyxmzEoPkHa5dH9
-            USER: 1030:100
-            #DATABASE_URL: mysql://vaultwarden_adm:hVXIHtRSpX4.1q@iserv-mariadb/vaultwarden_db
-            DATABASE_URL: mysql://${vaultwarden_user}:${vaultwarden_mysql_password}@iserv-mariadb/${vaultwarden_database}
-            #DOMAIN: "https://пароль.медвежуть.рф"
+            PUSH_INSTALLATION_ID_FILE: /run/secrets/push_installation_id
+            PUSH_INSTALLATION_KEY_FILE: /run/secrets/push_installation_key
+            #DATABASE_URL=mysql://[[user]:[password]@]host[:port][/database]
+            DATABASE_URL_FILE: /run/secrets/database_url
+            #DOMAIN: подставьте значение субдомена vaultwarden
+            DOMAIN_FILE: /run/secrets/domain
             # Отключите эту опцию с помощью "false" после создания учетной записи, чтобы никто из посторонних не смог зарегистрироваться.
             SIGNUPS_ALLOWED: "true"
-            #TZ: Europe/Moscow
-            # запускается при первом старте mariadb для установки пользователю root пароля MARIADB_ROOT_PASSWORD
-            #MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
-            # запускается при первом старте mariadb для создания файла .my-healthcheck.cnf
-            #MARIADB_AUTO_UPGRADE: 1
         secrets:
-            -  admin_token
+            - admin_token
+            - database_url
+            - push_installation_id
+            - push_installation_key
+            - domain
