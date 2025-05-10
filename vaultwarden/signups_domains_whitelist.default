@@ -1,0 +1,11 @@
+https://github.com/dani-garcia/vaultwarden/wiki/Disable-registration-of-new-users#restricting-registrations-to-certain-email-domains
+
+Вы можете согласовать регистрацию адресов электронной почты с определенными доменами, настроив SIGNUPS_DOMAINS_WHITELISTсоответствующим образом. Например:
+
+SIGNUPS_DOMAINS_WHITELIST=example.com(один домен)
+SIGNUPS_DOMAINS_WHITELIST=example.com,example.net,example.org(несколько доменов)
+Предупреждение
+
+Если SIGNUPS_DOMAINS_WHITELISTустановлено, то значение SIGNUPS_ALLOWEDигнорируется.
+
+Вы также можете установить SIGNUPS_VERIFY=true, который проверяет адреса электронной почты, прежде чем вновь зарегистрированный пользователь сможет успешно войти в систему. Это предотвращает регистрацию кого-либо с поддельным адресом электронной почты в соответствующем домене.

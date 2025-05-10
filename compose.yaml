@@ -17,6 +17,8 @@ secrets:
         file: ./vaultwarden/push_installation_key.sec
     domain:
         file: ./vaultwarden/domain.sec
+    signups_domains_whitelist:
+        file: ./vaultwarden/signups_domains_whitelist.sec
 
 services:
 
@@ -50,10 +52,15 @@ services:
             #DOMAIN: подставьте значение субдомена vaultwarden
             DOMAIN_FILE: /run/secrets/domain
             # Отключите эту опцию с помощью "false" после создания учетной записи, чтобы никто из посторонних не смог зарегистрироваться.
-            SIGNUPS_ALLOWED: "true"
+            SIGNUPS_ALLOWED: false
+            #INVITATIONS_ALLOWED: false
+            SIGNUPS_DOMAINS_WHITELIST_FILE: /run/secrets/signups_domains_whitelist
+            #Отображение подсказки пароля
+            #SHOW_PASSWORD_HINT:false
         secrets:
             - admin_token
             - database_url
             - push_installation_id
             - push_installation_key
             - domain
+            - signups_domains_whitelist
